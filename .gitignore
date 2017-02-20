@@ -1,0 +1,29 @@
+#==============================================================================#
+# file extensions to be ignored anywhere in the tree.
+#==============================================================================#
+# temp files created by most text editors.
+*~
+# merge files created by git.
+*.orig
+# byte compiled python modules.
+*.pyc
+# vim swap files
+.*.sw[a-z]
+.sw?
+
+#==============================================================================#
+# directories to ignore (do not add trailing '/'s, they skip symlinks).
+#==============================================================================#
+# generated excutable files
+/.build
+/packages
+
+# xcode configuration files
+/*.xcodeproj
+
+# generated docs
+docs/_build
+
+# finder metadata
+.ds_store
+
