@@ -19,11 +19,14 @@ extension Collection where Self.Iterator.Element: Equatable, Self.IndexDistance 
         }
 
         var subrange: Range<Self.Index>? = nil
-
         nextI: for _i in 0..<mcount {
             let i = self.index(self.startIndex, offsetBy: _i)
             guard i >= searchRange.lowerBound, i <= searchRange.upperBound else {
-                break
+                if i < searchRange.lowerBound {
+                    continue
+                } else {
+                    break
+                }
             }
 
             for j in  0..<scount {
