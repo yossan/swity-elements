@@ -44,35 +44,25 @@ class CollectionFindsTests: XCTestCase {
     }
 
     func testSubCharacterSearch() {
-        let str = "✒ 🍍 🍎 ✑"
-        var searchRange = str.startIndex..<str.startIndex
-        var r = str.characters.range(of: "🍎".characters, in: searchRange)
+        let chars = "Hello World".characters
+        var searchChars = "World".characters
+        var from = chars.index(after: chars.index(of: " ")!)
+        var to = chars.endIndex
+        var r = chars.range(of: searchChars, in: from..<to)
+        XCTAssertNotNil(r)
+        XCTAssertEqual(String(chars[r!]), String(searchChars))
+
+        searchChars = "Hello".characters
+        from = chars.index(after: chars.index(of: " ")!)
+        to = chars.endIndex
+        r = chars.range(of: searchChars, in: from..<to)
         XCTAssertNil(r)
+    }
 
-        searchRange = str.startIndex..<str.index(after: str.startIndex)
-        r = str.characters.range(of: "✒".characters, in: searchRange)
-        XCTAssertNotNil(r)
-        XCTAssertEqual(str[r!], "✒")
-
-        searchRange = str.index(after: str.startIndex)..<str.index(str.startIndex, offsetBy: str.characters.count - 2)
-        r = str.characters.range(of: "✒".characters, in: searchRange)
+    func testSubCharacterSearchOutOfRange() {
+        let a = "a".characters
+        let b = "bb".characters
+        let r = a.range(of: b, in: b.startIndex..<b.endIndex)
         XCTAssertNil(r)
-
-        searchRange = str.index(after: str.startIndex)..<str.index(str.startIndex, offsetBy: str.characters.count - 3)
-        r = str.characters.range(of: "✑".characters, in: searchRange)
-        XCTAssertNil(r)
-
-        r = str.characters.range(of: "🍍".characters, in: searchRange)
-        XCTAssertNotNil(r)
-        XCTAssertEqual(str[r!], "🍍")
-
-        r = str.characters.range(of: "🍎".characters, in: searchRange)
-        XCTAssertNotNil(r)
-        XCTAssertEqual(str[r!], "🍎")
-
-        searchRange = str.index(before: str.endIndex)..<str.endIndex
-        r = str.characters.range(of: "✑".characters, in: searchRange)
-        XCTAssertNotNil(r)
-        XCTAssertEqual(str[r!], "✑")
     }
 }

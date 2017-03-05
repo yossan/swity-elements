@@ -10,38 +10,37 @@ extension Collection where Self.Iterator.Element: Equatable, Self.IndexDistance 
 
     public func range<C: Collection>(of searchValue: C, in searchRange: Range<Self.Index>? = nil) -> Range<Self.Index>? 
     where C.Iterator.Element == Self.Iterator.Element, C.IndexDistance == Int {
-
         let searchRange = searchRange ?? self.startIndex..<self.endIndex
-        let mcount = self.count
-        let scount = searchValue.count
-        guard mcount >= scount else {
-            return nil
-        }
+        
+        guard self.startIndex <= searchRange.lowerBound,
+            self.endIndex >= searchRange.upperBound
+                else { return nil }
+
+        let from = self.distance(from: self.startIndex, to: searchRange.lowerBound)
+        let to = self.distance(from: self.startIndex, to: searchRange.upperBound)
+        let length = to - from
+
+        let searchLength = searchValue.distance(from: searchValue.startIndex, to: searchValue.endIndex)
+
+        guard length >= searchLength
+            else { return nil }
 
         var subrange: Range<Self.Index>? = nil
-        nextI: for _i in 0..<mcount {
-            let i = self.index(self.startIndex, offsetBy: _i)
-            guard i >= searchRange.lowerBound, i <= searchRange.upperBound else {
-                if i < searchRange.lowerBound {
-                    continue
-                } else {
-                    break
-                }
-            }
+        nextI: for i in from..<(to - (searchLength - 1)) {
+            for j in  0..<searchLength {
 
-            for j in  0..<scount {
+                let index = self.index(self.startIndex, offsetBy: i+j)
+                let searchIndex = searchValue.index(searchValue.startIndex, offsetBy: j)
 
-                let mindex = self.index(i, offsetBy: j)
-                let sindex = searchValue.index(searchValue.startIndex, offsetBy: j)
-
-                let m = self[mindex]
-                let s = searchValue[sindex]
+                let m = self[index]
+                let s = searchValue[searchIndex]
                 guard m == s else {
                     continue nextI
                 }
-
-                if j == scount - 1 {
-                    subrange = Range(uncheckedBounds: (lower: i, upper: self.index(after: mindex)))
+                if j == searchLength - 1 {
+                    subrange = Range(uncheckedBounds: 
+                        (lower: self.index(self.startIndex, offsetBy: i),
+                         self.index(after: index)))
                     break nextI
                 }
             }
