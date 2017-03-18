@@ -58,11 +58,4 @@ class CollectionFindsTests: XCTestCase {
         r = chars.range(of: searchChars, in: from..<to)
         XCTAssertNil(r)
     }
-
-    func testSubCharacterSearchOutOfRange() {
-        let a = "a".characters
-        let b = "bb".characters
-        let r = a.range(of: b, in: b.startIndex..<b.endIndex)
-        XCTAssertNil(r)
-    }
 }

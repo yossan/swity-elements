@@ -8,13 +8,13 @@
 
 extension Collection where Self.Iterator.Element: Equatable, Self.IndexDistance == Int, Self.Indices.Iterator.Element == Self.Index {
 
+    /**
+     Finds and returns the range of the first occurrence of given collection whose element is same,
+     within given range.
+     */
     public func range<C: Collection>(of searchValue: C, in searchRange: Range<Self.Index>? = nil) -> Range<Self.Index>? 
     where C.Iterator.Element == Self.Iterator.Element, C.IndexDistance == Int {
         let searchRange = searchRange ?? self.startIndex..<self.endIndex
-        
-        guard self.startIndex <= searchRange.lowerBound,
-            self.endIndex >= searchRange.upperBound
-                else { return nil }
 
         let from = self.distance(from: self.startIndex, to: searchRange.lowerBound)
         let to = self.distance(from: self.startIndex, to: searchRange.upperBound)
